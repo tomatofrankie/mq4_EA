@@ -16,8 +16,8 @@ Only 1 order at a time
 
 extern double LotSize=1;             //Position size
 
-extern double StopLoss=49;             //Stop loss in pips
-extern double TakeProfit=116;           //Take profit in pips
+extern double StopLoss=150;             //Stop loss in pips
+extern double TakeProfit=1150;           //Take profit in pips
 
 //extern int Slippage=2;                 //Slippage in pips
 
@@ -323,7 +323,11 @@ void CheckStochCross(){
    
    tmp1=iMA(Symbol(),0,26,0,MODE_SMA,0,2);
    tmp2=iMA(Symbol(),0,26,0,MODE_LWMA,0,2);
-   double linreg_pre=3.0*tmp2-2.0*tmp1;
+   double linreg_pre_1=3.0*tmp2-2.0*tmp1;
+   
+   tmp1=iMA(Symbol(),0,26,0,MODE_SMA,0,3);
+   tmp2=iMA(Symbol(),0,26,0,MODE_LWMA,0,3);
+   double linreg_pre_2=3.0*tmp2-2.0*tmp1;
 
    double adx_adx_line=iADX(Symbol(),0,13,PRICE_CLOSE,MODE_MAIN,0);
    double adx_plus_DI_2=iADX(Symbol(),0,13,PRICE_CLOSE,MODE_PLUSDI,2);
@@ -340,12 +344,15 @@ void CheckStochCross(){
    double adx_minus_DI_5=iADX(Symbol(),0,13,PRICE_CLOSE,MODE_MINUSDI,5);
 
 
-   if (linreg_curr>linreg_pre &&
+   if ((linreg_curr-linreg_pre_1)/linreg_pre_1*100>0.01 
+   //linreg_curr-linreg_pre_1>linreg_pre_1-linreg_pre_2
+   //linreg_curr>linreg_pre_1 
+   //linreg_pre_1>linreg_pre_2 &&
    //curr_adx>pre_adx
    //curr_adx>30 &&
     //(adx_plus_DI_2<adx_minus_DI_2 &&
-    adx_plus_DI_1<adx_minus_DI_1 &&
-    adx_plus_DI_0>adx_minus_DI_0 
+    //adx_plus_DI_1<adx_minus_DI_1 &&
+    //adx_plus_DI_0>adx_minus_DI_0 
     //(adx_plus_DI_3<adx_minus_DI_3 &&
     //adx_plus_DI_2<=adx_minus_DI_2 &&
     //adx_plus_DI_1>adx_minus_DI_1) ||
@@ -372,12 +379,14 @@ void CheckStochCross(){
 
    
 
-   if (linreg_curr<linreg_pre &&
+   if ((linreg_pre_1-linreg_curr)/linreg_pre_1*100>0.01 
+   //linreg_pre_1-linreg_curr>linreg_pre_2-linreg_pre_1
+   //linreg_curr<linreg_pre_1 
    //curr_adx>pre_adx
     //curr_adx>30 &&
     //(adx_plus_DI_2>adx_minus_DI_2 &&
-    adx_plus_DI_1>adx_minus_DI_1 &&
-    adx_plus_DI_0<adx_minus_DI_0 
+    //adx_plus_DI_1>adx_minus_DI_1 &&
+    //adx_plus_DI_0<adx_minus_DI_0 
     //(adx_plus_DI_3>adx_minus_DI_3 &&
     //adx_plus_DI_2>=adx_minus_DI_2 &&
     //adx_plus_DI_1<adx_minus_DI_1) ||
@@ -458,7 +467,7 @@ void CheckStochCross(){
 
    
 
-   if(//(linreg_curr<linreg_pre) && 
+   if((linreg_curr<linreg_pre_1) &&
     //((adx_plus_DI_2>adx_minus_DI_2 &&
     //adx_plus_DI_1>=adx_minus_DI_1 &&
     //adx_plus_DI_0<adx_minus_DI_0) ||
@@ -473,9 +482,9 @@ void CheckStochCross(){
     //adx_plus_DI_3<adx_minus_DI_3)) &&
    //curr_ma-pre_ma<2*Point &&
 
-//   (//(OpenPrice-Close[0]>SL && curr_slow_k<LowerThreshold && pre1_slow_k>LowerThreshold)||
+   //((OpenPrice-Close[0]>SL && curr_slow_k<LowerThreshold && pre1_slow_k>LowerThreshold)||
 //
-   ((curr_slow_k<UpperThreshold && pre1_slow_k>UpperThreshold) 
+   ((curr_slow_k<UpperThreshold && pre1_slow_k>UpperThreshold)
 //
    //(curr_fast_k<UpperThreshold && (pre1_fast_k>UpperThreshold||pre2_fast_k>UpperThreshold)
 //
@@ -485,7 +494,7 @@ void CheckStochCross(){
 
    }
 
-   if(//(linreg_curr>linreg_pre) &&
+   if((linreg_curr>linreg_pre_1) &&
    
     //((adx_plus_DI_2<adx_minus_DI_2 &&
     //adx_plus_DI_1<=adx_minus_DI_1 &&
@@ -501,9 +510,9 @@ void CheckStochCross(){
     //adx_plus_DI_3>adx_minus_DI_3)) &&
    //curr_ma-pre_ma>2*Point &&
 
-   //(//(Close[0]-OpenPrice>SL && curr_slow_k>UpperThreshold && pre1_slow_k<UpperThreshold)||
+   //((Close[0]-OpenPrice>SL && curr_slow_k>UpperThreshold && pre1_slow_k<UpperThreshold)||
 //
-   ((curr_slow_k>LowerThreshold && pre1_slow_k<LowerThreshold) 
+   ((curr_slow_k>LowerThreshold && pre1_slow_k<LowerThreshold)
 //
    //(curr_fast_k>LowerThreshold && (pre1_fast_k<LowerThreshold||pre2_fast_k<LowerThreshold)
 //
